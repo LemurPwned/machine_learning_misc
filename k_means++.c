@@ -42,15 +42,15 @@ double** cluster_center(usigned p_num){
 	}
 }*/
 
-int min(int distance){
+int min(int distance[], int size_array){
 	//TODO:
 	//calculate the minimum distance between any two points
 	//in the distance array, find good representation
 	//idea: let the index be the a specific cluster?
 	int i,j;
-	int min = 0;
-	//int size = (int) (sizeof(distance))/ sizeof(distance[0]);
-	for(i = 0; i<distance.size; i++){
+	int min = distance[0];
+	int size = size_array;
+	for(i = 0; i<size; i++){
 		if(distance[i] < min){
 			min = distance[i];
 	}				
@@ -96,6 +96,7 @@ int main()
 	//new_cluster_center(&c1);
 	//cout<<c1.center_x<<"\n";
 	//cout<<c1.center_y; 
-	int distance = {22, 31, 15, 98, 12};
-	int m = min(distance);
+	int dist[5] = {22, 31, 15, 98, 12};
+	int m = min(dist,5);
+	cout<<m<<endl;
 }
