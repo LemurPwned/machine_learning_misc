@@ -4,7 +4,7 @@
 #include <math.h>
 #include <time.h>
 #include <stdlib.h>
-
+#define MAX_CLUSTER_SIZE 100
 using namespace std;
 
 //frame for clustering and points is rectangle
@@ -14,25 +14,34 @@ using namespace std;
 
 //define the point struct
 typedef struct { int x, y; int group;} point_t;
-typedef struct { int points; int center_x, center_y; point_t group[100];} Cluster;
+typedef struct { int points; int center_x, center_y; point_t group[MAX_CLUSTER_SIZE];} Cluster;
 //provide an appropiate metrics measure, 
 //this will have only Euclidian distance for now in R^2
-/*
+
 point_t* generate(int count, int radius, point_t center){
-	//point_t* points = malloc(point_t)*count;
-	int i;
+	point_t *points =(point_t *) malloc(sizeof(point_t)*count);
+	int i, sign;
+	//sign = 0;
+	point_t *a = points;
 	int center_X = center.x;
 	int center_Y = center.y;
 	srand(time(NULL));
 	for (i = 0; i< count; i++){
-		point_t sig;
-		sig.x = rand()%radius + center_X;
-		sig.y = rand()%radius + center_Y;
-		points[i] = sig;
+		points -> x = (long)malloc(sizeof(int));
+		points -> y = (long)malloc(sizeof(int));
+		sign = (rand()%2)*2 - 1;
+		printf(" Sign is : %d \n", sign);
+		points -> x = sign*rand()%(radius+1) + center_X;
+		sign = (rand()%2)*2 - 1;
+		printf(" Second sign : %d \n", sign);
+		points -> y = sign*rand()%(radius+1) + center_Y;
+		printf("There is that point: (%i,%i) \n", points->x, points->y);
+		points += 1;
+		
 	}
-	return points;
+	return a;
 }
-*/
+
 /*
 double** cluster_center(usigned p_num){
 	double** cc = 0;
@@ -96,7 +105,13 @@ int main()
 	//new_cluster_center(&c1);
 	//cout<<c1.center_x<<"\n";
 	//cout<<c1.center_y; 
-	int dist[5] = {22, 31, 15, 98, 12};
-	int m = min(dist,5);
-	cout<<m<<endl;
+	//int dist[5] = {22, 31, 15, 98, 12};
+	//int m = min(dist,5);
+	//cout<<m<<endl;
+	point_t* test = generate(10, 5, b);
+	int j;
+	for (j = 0; j<10; j++){
+		printf(" Point is: (%i,%i)  \n", test->x, test->y);
+		test = test+1;	
+	}
 }
