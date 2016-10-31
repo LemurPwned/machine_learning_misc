@@ -117,7 +117,7 @@ int main()
 	point_t *point_list_holder = list_points;
 	//perhaps have 5 points as "cluster centers"
 	//and generate 5 more around them
-	int j;
+	/*int j;
 	for (i = 0; i < 5 ; i++){
 		point_list_holder->x = (long)(malloc(sizeof(int)));
 		point_list_holder->y = (long)(malloc(sizeof(int)));
@@ -126,34 +126,56 @@ int main()
 			point_list_holder->y = (long)(malloc(sizeof(int)));
 			point_list_holder->y = (long)(malloc(sizeof(int)));
 		}
-	}
+	}*/
 	//or have, say, 5 groups
+	//instead of this below
+	/*
 	point_t *group1 = (point_t *)(malloc(sizeof(point_t *)*5));	
 	point_t *group2 = (point_t *)(malloc(sizeof(point_t *)*5));	
 	point_t *group3 = (point_t *)(malloc(sizeof(point_t *)*5));	
 	point_t *group4 = (point_t *)(malloc(sizeof(point_t *)*5));	
 	point_t *group5 = (point_t *)(malloc(sizeof(point_t *)*5));	
+	*/
+	//need 5 groups, each 5 members
+	point_t **groups = (point_t **)(malloc(sizeof(point_t**)*5));
 	//these are centers of groups
 	point_t a = {rand()%60, rand()%60};
 	point_t b = {rand()%60, rand()%60};
 	point_t c = {rand()%60, rand()%60};
 	point_t d = {rand()%60, rand()%60};
 	point_t e = {rand()%60, rand()%60};
+	point_t lp [5] = {a, b, c, d, e};
 	printf(" Hello point (%i, %i) \n", a.x, a.y);
+	/*
 	group1 = generate(5, 7, a);
 	group2 = generate(5, 7, b);
 	group3 = generate(5, 7, c);
 	group4 = generate(5, 7, d);
 	group5 = generate(5, 7, e);
+	*/
 	//control display group
-	point_t *group_holder = group1;
+	point_t **group_holder = groups;
+	for (i = 0; i < 5; i++){
+		&group_holder = generate(5, 7,lp[i]);
+		group_holder += 1;
+	}
+	//reset
+	group_holder = groups;
 	for (i = 0; i < 5; i ++){
 		printf(" Member of A, no %i is: (%i, %i) \n", i+1, group_holder->x, group_holder->y);
 		group_holder += 1;
 	}
-	//now pick up a distance table
+	//now pick up a distance table for each point
+	//it's late, fix that later 
+	//TODO:
+	//fix the representation of many gropus, combine with 
+	//pointers
+	point_t *groups = (point_t *)(malloc(sizeof(group1)*5));
+	point_t *gholder = groups;
+	for (i = 0; i <5; i++){
+		gholder->
+	}
 	
-
 	
 	//int dist = distance(a,b);
 	/*Cluster c1;
