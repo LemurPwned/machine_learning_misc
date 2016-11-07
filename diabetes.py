@@ -1,3 +1,4 @@
+import time
 from sklearn import datasets
 from sklearn import linear_model
 from sklearn.cross_validation import train_test_split
@@ -10,28 +11,39 @@ Y = diabetes.target
 X = diabetes.data
 
 x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size = 0.33, random_state = 1)
+
 alphas = np.logspace(-4, 0.5, 30)
+
 models = {'LinReg' : linear_model.LinearRegression(),
           'Ridge'  : linear_model.Ridge(),
-          'RidgeCV': linear_model.RidgeCV(alphas = [0.01, 0.001, 0.1, 2, 3]),
+          'RidgeCV': linear_model.RidgeCV(),
           'Lasso'  : linear_model.Lasso(),
+          'LassoCV': linear_model.LassoCV(),
+         # 'LassoLarsCV': linear_model.LassoLarsCV(),
+          'LassoLarsIC_AIC': linear_model.LassoLarsIC(criterion ='aic'),
+          'LassoLarsIC_BIC': linear_model.LassoLarsIC(criterion ='bic'),
           'LassoLars' : linear_model.LassoLars(),
-          'ElasticNet' : linear_model.ElasticNet()
+          'ElasticNet' : linear_model.ElasticNet()          
         }
-for name, model in models.items():
-    model.fit(x_train, y_train)
-    print  "%s score : %f " %(name, model.score(x_test, y_test))
 
-#just lasso
-print "\n\n"
-scores = []
-lasso = linear_model.Lasso(random_state = 0)
-for alpha in alphas:
-    lasso.alpha = alpha
-    lasso.fit(x_train, y_train)
-    score = lasso.score(x_test, y_test)
-    scores.append(score)
-    #print "alpha %f score : %f " %(alpha, score)
+scores = {}
+t_check = []
+t2 = 0
+for name, model in models.items():
+    for alpha in alphas:
+        model.alpha = alpha
+        if 'CV' in name:
+            model.cv = 20
+        #check time of training
+        t1 = time.time()
+        model.fit(x_train, y_train)
+        t2 = time.time() - t1
+        t_check.append((model.score(x_test, y_test), t2))
+    scores[name] = (max(t_check))
+    t_check = []
+
+for key in scores:
+    print "%s scored: %f ; training time : %f \n" %(key, scores[key][0], scores[key][1])
 
 '''
 plt.figure()
@@ -43,21 +55,4 @@ plt.show()
 '''
 #quite unreasonable, low, accuracy and huge standard deviaton
 #reject this method
-scores_r = []
-ridgeCV = linear_model.RidgeCV()
-for alpha in alphas:
-    ridgeCV.alpha = alpha
-    ridgeCV.fit(x_train, y_train)
-    score = ridgeCV.score(x_test, y_test)
-    scores_r.append(score)
 
-plt.figure()
-plt.semilogx(alphas, scores_r)
-plt.ylabel('score')
-plt.xlabel('alpha')
-plt.xlim([alphas[0], alphas[-1]])
-plt.title('RidgeCV')
-plt.show()
-
-   
-print max(scores_r)
