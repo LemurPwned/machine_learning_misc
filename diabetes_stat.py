@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn import datasets
 import seaborn as sns
 import matplotlib.pytplot as plt
+from scipy import stats
 
 diabetes = datasets.load_diabetes()
 
@@ -28,7 +29,7 @@ sns.jointplot(x="age", y="y", data=diab)
 g = sns.jointplot(x="age", y="y", kind="kde", color="m", data=diab)
 g.plot_joint(plt.scatter, c="w", s=30, linewidth=1, marker=".")
 g.ax_joint.collections[0].set_alpha(0)
-g.set_axis_labels("@
+
 
 
 
